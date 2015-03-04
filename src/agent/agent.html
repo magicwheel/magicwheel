@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>MAGICWHEEL AGENT</title>
+
+	<script>
+		var debug = (window.location.search.indexOf('debug') != -1);
+
+		if (debug) {
+			var s = document.createElement('script');
+			s.setAttribute('src', '/js/contrib/angular.min.js');
+			s.setAttribute('type', 'text/javascript');
+			document.head.appendChild(s);
+		}
+	</script>
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			width: 100%;
+			font-family: sans-serif;
+			font-size: 14px;
+		}
+		#homeLink {
+			left: 20px;
+			position: absolute;
+		}
+		.bottomLink {
+			text-decoration: underline;
+			color: #337ab7;
+		}
+		.bottomLink:hover {
+			color: #23527c;
+		}
+		#appRunning {
+			position: absolute;
+			right: 20px;
+		}
+		#mwswitch {
+			position: fixed;
+			z-index: 1000;
+			bottom: 0;
+			padding: 10px 0 10px 0;
+			width: 100%;
+			background: lightcoral;
+			text-align: center;
+			cursor: pointer;
+		}
+		#mwconsole {
+			background: lightyellow;
+			padding: 10px;
+			width: 100%;
+			min-height: 100%;
+			position: absolute;
+		}
+		#mwappWrapper {
+			background: lightcyan;
+			width: 100%;
+			min-height: 100%;
+			position: absolute;
+			text-align: center;
+		}
+	</style>
+	<!-- use web worker as ticker to work around hidden tabs low CPU priority-->
+	<script id="magicwheel-ticker" type="javascript/worker">
+		setInterval(function () {
+			self.postMessage('tick');
+		}, 1000 / 60);
+	</script>
+
+	<!--	<script type="text/javascript" src="/js/contrib/angular.min.js"></script>-->
+	<!--    <script type="text/javascript" src="/js/agent.js"></script>-->
+	<script>
+		var magicwheel = {};
+
+		var disableMwswitch = false;
+
+		function mwswitch() {
+			if (disableMwswitch) {
+				disableMwswitch = false;
+				return;
+			}
+
+			if ($("[data-toggle='tooltip']").tooltip) {
+				$("[data-toggle='tooltip']").tooltip({
+					html: true
+				});
+			}
+
+			var hidden = $('.mwmain:hidden');
+			var shown = $('.mwmain:visible');
+			hidden.show();
+			shown.hide();
+		}
+
+		function downloadApp() {
+			disableMwswitch = true;
+			magicwheel.dowloadAppCode();
+		}
+
+		function wiki() {
+			magicwheel.executeRoute('/wiki/process', {
+				term: 'explicit'
+			}, 'SELF').then(function (result) {});
+		}
+
+		function listTasks() {
+			magicwheel.executeRoute('/task/list', {}, 'SELF');
+		}
+
+		function initMagicwheel() {
+			console.log('*******INIT MAGICWHEEL***********');
+
+			magicwheel.on('appLoaded', function () {
+				$('#appName').html(magicwheel.currentApp);
+				$('#appRunning').show();
+				magicwheel.consoleController.$apply();
+			});
+
+			magicwheel.on('forever', function () {
+				magicwheel.consoleController.bindAndApply();
+			});
+
+//			magicwheel.on('/task/update', function (data) {
+//				if ($('#task-' + data.data.id).length) {
+//					$('#task-' + data.data.id)[0].innerHTML = data.data.status;
+//				}
+//			});
+//
+//			magicwheel.on('/wiki/process', function (data) {
+//				$('#tasks').append('<div id=task-' + data.taskId + '>STARTED</div>');
+//			});
+//
+//			magicwheel.on('/task/finish', function (data) {
+//				console.log(data);
+//				if ($('#task-' + data.data.task.id).length) {
+//					$('#task-' + data.data.task.id)[0].innerHTML = 'Fetching associations for term: ' + data.data.task.result.normalized + ' FINISHED';
+//				}
+//			});
+//
+//			magicwheel.on('taskExecuted', function (data) {
+//				$('#taskExecuted')[0].innerHTML = data.count;
+//			});
+
+			var blob = new Blob([
+      document.querySelector('#magicwheel-ticker').textContent
+    ], {
+				type: "text/javascript"
+			});
+
+			var worker = new Worker(window.URL.createObjectURL(blob));
+
+			worker.onmessage = function (e) {
+				magicwheel.emit('tick');
+			}
+		}
+
+		 //called when window.magicwheel is initiated
+		window.initMagicWheel = initMagicwheel;
+	</script>
+
+</head>
+
+<body>
+	<div id='mwconsole' style='display:none;' class='mwmain' ng-controller='console'>
+		<a ng-href="#" ng-click="$apply()">XXXXXXXXXXXXXX</a>
+		MAGICWHEEL CONSOLE2
+		<br>
+		<br>Current application: {{magicwheel.currentApp}}
+
+		<br>Debug mode: {{isDebugMode()}}
+		<br>
+		<button onclick='wiki()'>WIKI PROCESS</button>
+		<button onclick='listTasks()'>LIST TASKS</button>
+		<br>id:{{magicwheel.mainRoom.peer.id || magicwheel.mainRoom.peer._lastServerId}}
+		<br>peers:
+		<div ng-repeat="(k,v) in magicwheel.mainRoom.peer.connections">
+			{{k}} - open: {{magicwheel.mainRoom.peer.connections[k][0].open}} - latency: {{magicwheel.mainRoom.latencies[k]}}
+		</div>
+		<br>tasks:
+		<br>
+		<div id='tasks'></div>
+		<br>TASKS LOCALLY EXECUTED: <span id='taskExecuted'>0</span>
+		<!--		<img class="help" magicwheel-src="images/help.png" data-toggle="tooltip" data-placement="auto" data-original-title="To have your application available on the server, add it to the magicwheel source code on github" src="http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/red-white-pearls-icons-alphanumeric/073894-red-white-pearl-icon-alphanumeric-question-mark1-ps.png">-->
+	</div>
+	<div id='mwappWrapper' class='mwmain'>
+		<div id='mwapp' class='mwapp'>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>LOADING MAGICWHEEL AGENT...
+		</div>
+	</div>
+	<div id='mwswitch' onclick='mwswitch()'>
+		<a id='homeLink' class='bottomLink' href='/' onclick="disableMwswitch=true;">Magicwheel Home</a>
+		<span id='appRunning' style='display:none;'>Application running: <span id='appName'></span>
+		<a id='downloadAppLink' class='bottomLink' href='#' onclick="downloadApp();">Save as ZIP</a>
+		</span>
+		<span class='mwmain'>SHOW MAGICWHEEL CONSOLE</span>
+		<span class='mwmain' style='display:none'>SHOW MAGICWHEEL APPLICATION</span>
+	</div>
+
+	<script>
+		var debug = (window.location.search.indexOf('debug') != -1);
+
+		var s = document.createElement('script');
+		s.setAttribute('src', '/app/js/require.js');
+		if (debug) {
+			s.setAttribute('data-main', '/app/js/app');
+		} else {
+			s.setAttribute('data-main', '/app/js/app-built');
+		}
+		document.body.appendChild(s);
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+
+	<div id="mwalert" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title header">Alert Header</h4>
+				</div>
+				<div class="modal-body">
+					<p class='message'>Alert Message</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary btn-default" data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

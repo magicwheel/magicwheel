@@ -1,0 +1,73 @@
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+	<script type="text/javascript" src="js/welcome.js"></script>
+	<script type="text/javascript" src="js/controller.js"></script>
+</head>
+
+<body>
+	<img id='clouds' src='images/clouds.jpg' />
+	<a href="https://github.com/magicwheel" style='cursor:pointer;'>
+		<img style="position: absolute; top: 0; left: 0; border: 0;" src="images/github.png" alt="Fork me on GitHub">
+	</a>
+	<div id='drag'>
+		<br>
+		<div id='apps' ng-controller='welcome'>
+			<div style="display:none;" class='logo showOnReady'>
+				<img width=200 src='images/logo.png'></img>
+				<div id='dragHere'>Drop your application
+					<br>zip file here
+					<br>
+					<br>Let it spread over
+					<br>the browsers' cloud</div>
+			</div>
+			<div style="display:none;" id="appsPanel" class="panel panel-default showOnReady" ng-cloak>
+				<div class="panel-heading">
+					Applications on server
+					<img class='help' src='images/help.png' data-toggle="tooltip" data-placement="auto" data-original-title="{{tooltips.server}}" />
+				</div>
+				<table class="table">
+					<tr ng-repeat="a in serverApps">
+						<td><a class="loadApp" ng-href="javascript:window.location.href = '/app/{{a.name}}?server'" title='Run Application'>{{a.name}}</a>
+						</td>
+						<td>{{a.description}}</td>
+					</tr>
+				</table>
+				<div class="panel-heading">
+					Applications on local browser
+					<img class='help' src='images/help.png' data-toggle="tooltip" data-placement="auto" data-original-title="{{tooltips.localStorage}}" />
+				</div>
+				<table class="table">
+					<tr ng-repeat="a in localApps">
+						<td><a class="loadApp" ng-href="javascript:window.location.href = '/app/{{a.name}}'" title='Run Application'>{{a.name}}</a>
+						</td>
+						<td>size: {{a.size}}</td>
+						<td><a ng-href="#" ng-click="removeApp(a.name)">Remove</a>
+						</td>
+						<td><a ng-href="javascript:window.magicwheel.dowloadAppCode('{{a.name}}')">Save as ZIP</a>
+						</td>
+					</tr>
+				</table>
+				<div class="panel-heading">
+					Applications on remote browsers
+					<img class='help' src='images/help.png' data-toggle="tooltip" data-placement="auto" data-original-title="{{tooltips.remote}}" />
+
+				</div>
+				<table class="table">
+					<tr ng-show="remoteApps.length == 0">
+						<td>No remote browsers detected</td>
+					</tr>
+					<tr ng-repeat="a in remoteApps">
+						<td><a class="loadApp" ng-href="javascript:window.location.href = '/app/{{a.name}}'" title='Run Application'>{{a.name}}</a>
+						</td>
+						<td>users: {{a.count}}</td>
+					</tr>
+				</table>
+			</div>
+
+
+</body>
+
+</html>

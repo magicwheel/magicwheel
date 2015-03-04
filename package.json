@@ -1,0 +1,17 @@
+{
+    "name": "magic-wheel",
+    "version": "0.0.1",
+    "description": "mesh framework",
+    "dependencies": {
+        "express": "*",
+        "cookie": "*",
+        "q": "*",
+        "lodash-node": "*",
+        "node.extend": "*",
+        "peer": "*",
+        "cookie-parser": "*",
+        "archiver": "*",
+        "concat-files": "*",
+        "requirejs": "*"
+    }
+}

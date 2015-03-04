@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 14px;
+}
+#homeLink {
+    left: 20px;
+    position: absolute;
+}
+.bottomLink {
+    text-decoration: underline;
+    color: #337ab7;
+}
+.bottomLink:hover {
+    color: #23527c;
+}
+#appRunning {
+    position: absolute;
+    right: 20px;
+}
+#mwswitch {
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    padding: 10px 0 10px 0;
+    width: 100%;
+    background: lightcoral;
+    text-align: center;
+    cursor: pointer;
+}
+#mwconsole {
+    background: lightyellow;
+    padding: 10px;
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+}
+#mwappWrapper {
+    background: lightcyan;
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+    text-align: center;
+}

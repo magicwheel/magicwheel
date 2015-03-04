@@ -1,0 +1,44 @@
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+	<script type="text/javascript" src="js/md5.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/cracker.js"></script>
+
+
+</head>
+
+<body>
+	<br>
+	<br>MD5 CRACKER
+	<br>
+	<br>Encrypted strings may be replaced by any 3-characters-passwords <a href='http://www.md5.cz'>MD5 hashes</a>
+	<br>
+	<br>
+	<div id='apps' ng-controller='md5'>
+		Encrypted #1:
+		<input ng-disabled="active" class='encrypted' ng-model='encrypted[0]'></input> Cracked: {{cracked[0]}}
+		<br>Encrypted #2:
+		<input ng-disabled="active" class='encrypted' ng-model='encrypted[1]'></input> Cracked: {{cracked[1]}}
+		<br>Encrypted #3:
+		<input ng-disabled="active" class='encrypted' ng-model='encrypted[2]'></input> Cracked: {{cracked[2]}}
+		<br>
+
+		<br>
+		<button ng-disabled="active" ng-click='crack()'>CRACK</button>
+		<br>
+		<br>Tasks completed: {{tasksFinished}}/{{tasksTotal}}
+		<br>
+		<br>Number of remote browsers: {{remoteBrowsers}}
+		<br>
+		<br>Tasks completed on local browser: {{tasksLocal}}
+		<br>Tasks completed on remote browsers: {{tasksRemote}}
+		<br>
+		<br>Time elapsed: {{elapsed}} seconds
+	</div>
+
+</body>
+
+</html>

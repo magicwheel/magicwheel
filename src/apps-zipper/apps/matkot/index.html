@@ -1,0 +1,78 @@
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<!--    <script type="text/javascript" src="js/jquerymousewheel.js"></script>-->
+	<script type="text/javascript" src="js/matkot.mainCtrl.js"></script>
+	<script type="text/javascript" src="js/three.min.js"></script>
+	<script type="text/javascript" src="js/matkot.game.js"></script>
+	<script type="text/javascript" src="js/matkot.controls.js"></script>
+	<script type="text/javascript" src="js/matkot.view2d.js"></script>
+	<script type="text/javascript" src="js/matkot.view3d.js"></script>
+	<script type="text/javascript" src="js/matkot.js"></script>
+</head>
+
+<body class='mwapp'>
+	<img id='clouds' src='images/clouds.jpg' />
+	<a href="https://github.com/magicwheel" style='cursor:pointer;'>
+		<img style="position: absolute; top: 0; left: 0; border: 0;" src="images/github.png" alt="Fork me on GitHub">
+	</a>
+
+	<div id='matkot' ng-controller='matkot'>
+		MATKOT {{myName}}
+		<br>
+		<br>
+		<div id='fwrapper' style='left:50%;position:fixed;'>
+			<div id='field' ng-class="{view3D: view3D}">
+				<div id='viewSwitch' ng-click='switchView()'>2D/3D</div>
+				<img id='logo' width=200 src='images/logo.png' ng-hide='view3D'></img>
+				<div id='game' ng-hide='view3D'>
+					<div id='left' class='actor'>
+					</div>
+					<div id='right' class='actor'>
+					</div>
+					<div id='ball'>
+					</div>
+				</div>
+				<div id='canvas3d' ng-show='view3D' />
+				<div id='nameInputWrapper' class='upperInfo' ng-show="myName == ''">
+					Your name:
+					<input id='nameInput' ng-model="inputName" type="text" ng-keypress="($event.which === 13)?setName(inputName):0" autofocus></input>
+					<a id='nameButton' ng-click='setName(inputName)'>JOIN</a>
+				</div>
+				<div class='upperInfo' ng-show="game.model.waitingForStrike">
+					<span ng-show="game.model.myRole == 'left'"> Click the mouse or hit space to start </span>
+					<span ng-show="game.model.myRole == 'right'"> Waiting for partner to start </span>
+				</div>
+				<div class='upperInfo' ng-show="game.model.active && !game.model.waitingForStrike">
+					<span> Use mousewheel or arrow keys to move </span>
+				</div>
+				<div id='bestScoreEver'>Best score ever: <span>{{bestScoreDescription}}</span>
+				</div>
+				<div id='quit' ng-show="game.model.active">
+					Playing with {{game.model.hisName}}<a ng-click='gameQuit()'>QUIT</a>
+				</div>
+				<div id='disconnected' ng-show="game.model.disconnected">
+					{{game.model.hisName}} disconnected <a ng-click='gameQuit()'>BACK</a>
+				</div>
+				<div class='usersList' ng-show="state=='LOBBY' && !availablePlayers()">
+					No remote players available
+				</div>
+				<div class='usersList' ng-show="state=='LOBBY' && availablePlayers()">
+					<span ng-show="myName == ''">ONLINE: </span>
+					<span ng-show="myName != ''">INVITE: </span>
+					<span ng-repeat="(k,v) in remoteUsersByName">
+						<span ng-show="myName == ''">{{k}}</span> 
+					<a ng-show="myName != ''" href='#' ng-click="invite(v)">{{k}}</a> 
+					</span>
+				</div>
+				<div id='score' ng-show="game.model.score > -1 && game.model.active">
+					Score: {{game.model.score}} &nbsp;&nbsp; Hi Score: {{game.model.hiScore}}
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>
