@@ -50,7 +50,9 @@ define(function (require) {
             magicwheel.roomCreated = true;
             
             deferred.resolve();
-        });
+        },function(error){
+			deferred.reject(error);
+		});
         
         return deferred.promise;
     }

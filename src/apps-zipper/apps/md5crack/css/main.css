@@ -1,7 +1,19 @@
-#mwappWrapper{
-/*	background: yellow !important;*/
+#mwappWrapper {
+	/*	background: yellow !important;*/
 }
-
-.encrypted{
+.encrypted {
 	width: 270px;
+}
+.panel {
+	/*	text-align: left;*/
+	width: 515px;
+	float: right;
+	-webkit-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	-moz-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	width: 600px;
+	left: 50%;
+	position: absolute;
+	margin-left: -300px;
+	margin-top: 20px;
 }

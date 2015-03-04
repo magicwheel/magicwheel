@@ -1,210 +1,212 @@
 define(function (require) {
-    var q = require('contrib/q'),
-        mwfs = require('mwcommon/mwfs'),
+	var q = require('contrib/q'),
+		mwfs = require('mwcommon/mwfs'),
 		mwstorage = require('mwcommon/mwstorage'),
-        $ = require('jquery');
+		$ = require('jquery');
 
-    var magicApps = {
-        loadApp: function (appName) {
-            var deferred = q.defer();
+	var magicApps = {
+		loadApp: function (appName) {
+			var deferred = q.defer();
 
-            magicwheel.currentApp = appName;
+			magicwheel.currentApp = appName;
 
-            magicwheel.createRoom().then(function () {
-                if (window.location.search.indexOf('refresh') != -1 ||
-                    window.location.search.indexOf('server') != -1) {
-                    mwstorage.delete('appZip');
-                }
-                magicApps._loadAppInner(appName, deferred);
-            });
+			magicwheel.createRoom().then(function () {
+				if (window.location.search.indexOf('refresh') != -1 ||
+					window.location.search.indexOf('server') != -1) {
+					mwstorage.delete('appZip');
+				}
+				magicApps._loadAppInner(appName, deferred);
+			}, function (error) {
+				deferred.reject(error);
+			});
 
-            return deferred.promise;
-        },
+			return deferred.promise;
+		},
 
-        dowloadAppCode: function (appName) {
-            if(!appName){
-                appName = magicwheel.currentApp;
-            }
-			
+		dowloadAppCode: function (appName) {
+			if (!appName) {
+				appName = magicwheel.currentApp;
+			}
+
 			var dataURI = mwstorage.get('appZip', appName);
-			
-            var pom = document.createElement('a');
-            pom.setAttribute('href', mwfs.dataURItoDataURL(dataURI));
-            pom.setAttribute('download', appName + '.zip');
+
+			var pom = document.createElement('a');
+			pom.setAttribute('href', mwfs.dataURItoDataURL(dataURI));
+			pom.setAttribute('download', appName + '.zip');
 			document.body.appendChild(pom);
-            pom.click();
-        },
+			pom.click();
+		},
 
-        _loadAppInner: function (appName, deferred) {
-            console.log('loadAppInner');
+		_loadAppInner: function (appName, deferred) {
+			console.log('loadAppInner');
 
-            if (mwstorage.get('appZip', appName)) {
-                magicApps._loadAppFromStorage(appName, deferred);
-            } else {
-                console.log('Trying to get app from server');
+			if (mwstorage.get('appZip', appName)) {
+				magicApps._loadAppFromStorage(appName, deferred);
+			} else {
+				console.log('Trying to get app from server');
 
-                mwfs.urlToStorage('/zip/' + appName + '.zip' + window.location.search, 'appZip', appName).then(function (dataUri) {
-                    console.log('App retrieved from server');
-                    magicApps._loadAppFromStorage(appName, deferred);
-                }, function (status) {
-                    magicApps._loadAppFromRoom(appName).then(function () {
-                        magicApps._loadAppFromStorage(appName, deferred);
-                    });
-                });
-            }
-        },
+				mwfs.urlToStorage('/zip/' + appName + '.zip' + window.location.search, 'appZip', appName).then(function (dataUri) {
+					console.log('App retrieved from server');
+					magicApps._loadAppFromStorage(appName, deferred);
+				}, function (status) {
+					magicApps._loadAppFromRoom(appName).then(function () {
+						magicApps._loadAppFromStorage(appName, deferred);
+					});
+				});
+			}
+		},
 
-        _loadAppFromStorage: function (appName, deferred) {
-            console.log('Loading app from storage');
-            mwfs.storageToZipBlobs('appZip', appName).then(function () {
-                var innerPath = window.location.pathname.substring(6 + appName.length);
+		_loadAppFromStorage: function (appName, deferred) {
+			console.log('Loading app from storage');
+			mwfs.storageToZipBlobs('appZip', appName).then(function () {
+				var innerPath = window.location.pathname.substring(6 + appName.length);
 
-                if (!innerPath) {
-                    innerPath = 'index.html';
-                }
+				if (!innerPath) {
+					innerPath = 'index.html';
+				}
 
-                magicApps._loadHtml(innerPath, deferred);
-            });
-        },
+				magicApps._loadHtml(innerPath, deferred);
+			});
+		},
 
-        appRecieved: false,
+		appRecieved: false,
 
-        _loadAppFromRoom: function (appName, deferred) {
-            if (!deferred) {
-                deferred = q.defer();
-            }
+		_loadAppFromRoom: function (appName, deferred) {
+			if (!deferred) {
+				deferred = q.defer();
+			}
 
-            console.log('Loading app from room');
+			console.log('Loading app from room');
 
-            var answers = magicwheel.mainRoom.askAll({
-                route: '/storage/get',
-                key: 'appZip',
+			var answers = magicwheel.mainRoom.askAll({
+				route: '/storage/get',
+				key: 'appZip',
 				appName: appName
-            });
-            answers.map(function (answer) {
-                answer.then(function (result) {
-                    if (magicApps.appRecieved) {
-                        return;
-                    }
-                    magicApps.appRecieved = true;
+			});
+			answers.map(function (answer) {
+				answer.then(function (result) {
+					if (magicApps.appRecieved) {
+						return;
+					}
+					magicApps.appRecieved = true;
 
 					//!!!
-                    mwstorage.set('appZip', result.answer, appName);
+					mwstorage.set('appZip', result.answer, appName);
 
-                    deferred.resolve();
-                });
-            });
+					deferred.resolve();
+				});
+			});
 
-            setTimeout(function () {
-                if (!magicApps.appRecieved) {
-                    magicApps._loadAppFromRoom(appName, deferred);
-                }
-            }, 1000);
+			setTimeout(function () {
+				if (!magicApps.appRecieved) {
+					magicApps._loadAppFromRoom(appName, deferred);
+				}
+			}, 1000);
 
-            return deferred.promise;
-        },
+			return deferred.promise;
+		},
 
-        _loadHtml: function (path, deferred) {
-            if (!deferred) {
-                deferred = q.defer();
-            }
+		_loadHtml: function (path, deferred) {
+			if (!deferred) {
+				deferred = q.defer();
+			}
 
-            if (path.substring(0, 4) == 'http') {
-                var win = window.open(path, '_blank').focus();
-                return;
-            }
+			if (path.substring(0, 4) == 'http') {
+				var win = window.open(path, '_blank').focus();
+				return;
+			}
 
-            var historyState = '/app/' + magicwheel.currentApp;
+			var historyState = '/app/' + magicwheel.currentApp;
 
-            if (path.indexOf('.html') == -1) {
-                path += '.html';
-            }
+			if (path.indexOf('.html') == -1) {
+				path += '.html';
+			}
 
-            if (path != 'index.html') {
-                historyState += ('/' + path.replace('.html', ''));
-            }
+			if (path != 'index.html') {
+				historyState += ('/' + path.replace('.html', ''));
+			}
 
-            window.history.replaceState({}, '', historyState + window.location.search);
+			window.history.replaceState({}, '', historyState + window.location.search);
 
 			mwstorage.clearMemory();
-			
-            magicwheel.page = {};
 
-            magicwheel.currentPath = path;
+			magicwheel.page = {};
 
-            magicwheel.emit('loadHtml', path);
+			magicwheel.currentPath = path;
 
-            if (!magicwheel.appZipBlobs[path]) {
-                deferred.reject("File not found in zip: " + path);
-                return;
-            }
+			magicwheel.emit('loadHtml', path);
 
-            mwfs.blobToText(magicwheel.appZipBlobs[path]).then(function (text) {
-                $('link[magicwheel]').remove();
+			if (!magicwheel.appZipBlobs[path]) {
+				deferred.reject("File not found in zip: " + path);
+				return;
+			}
 
-                $('script[magicwheel]').remove();
+			mwfs.blobToText(magicwheel.appZipBlobs[path]).then(function (text) {
+				$('link[magicwheel]').remove();
 
-                text = text.replace(/ src=/g, ' magicwheel-src=');
+				$('script[magicwheel]').remove();
 
-                text = text.replace(/ href=/g, ' magicwheel-href=');
+				text = text.replace(/ src=/g, ' magicwheel-src=');
 
-                text = text.replace(/ mwhref=/g, ' href=');
+				text = text.replace(/ href=/g, ' magicwheel-href=');
 
-                $('#mwapp').html(text);
+				text = text.replace(/ mwhref=/g, ' href=');
 
-                $('#mwapp img').each(function () {
-                    var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-src'));
-                    $(this).attr('src', blobURL);
-                });
+				$('#mwapp').html(text);
 
-                $('#mwapp link').each(function () {
-                    $(this).remove();
+				$('#mwapp img').each(function () {
+					var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-src'));
+					$(this).attr('src', blobURL);
+				});
 
-                    var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-href'));
+				$('#mwapp link').each(function () {
+					$(this).remove();
 
-                    magicApps._loadCSS(blobURL);
-                });
+					var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-href'));
 
-                $('#mwapp a').each(function () {
-                    var path = $(this).attr('magicwheel-href');
+					magicApps._loadCSS(blobURL);
+				});
 
-                    if (path) {
-                        $(this).click(function () {
-                            magicApps._loadHtml(path);
-                        });
-                    }
-                });
+				$('#mwapp a').each(function () {
+					var path = $(this).attr('magicwheel-href');
 
-                $('#mwapp script').each(function () {
-                    try {
-                        $(this).remove();
+					if (path) {
+						$(this).click(function () {
+							magicApps._loadHtml(path);
+						});
+					}
+				});
 
-                        var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-src'));
+				$('#mwapp script').each(function () {
+					try {
+						$(this).remove();
 
-                        magicApps._loadJS(blobURL);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                });
+						var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-src'));
 
-                deferred.resolve(magicwheel.mainRoom);
-            });
+						magicApps._loadJS(blobURL);
+					} catch (e) {
+						console.log(e);
+					}
+				});
 
-        },
+				deferred.resolve(magicwheel.mainRoom);
+			});
 
-        _loadCSS: function (href) {
-            var cssLink = $("<link magicwheel rel='stylesheet' type='text/css' href='" + href + "'>");
-            $("head").append(cssLink);
-        },
+		},
 
-        _loadJS: function (src) {
-            jQuery.ajaxSetup({
-                cache: true
-            });
-            var jsLink = $("<script magicwheel type='text/javascript' src='" + src + "'>");
-            $("head").append(jsLink);
-        }
-    };
+		_loadCSS: function (href) {
+			var cssLink = $("<link magicwheel rel='stylesheet' type='text/css' href='" + href + "'>");
+			$("head").append(cssLink);
+		},
 
-    return magicApps;
+		_loadJS: function (src) {
+			jQuery.ajaxSetup({
+				cache: true
+			});
+			var jsLink = $("<script magicwheel type='text/javascript' src='" + src + "'>");
+			$("head").append(jsLink);
+		}
+	};
+
+	return magicApps;
 });

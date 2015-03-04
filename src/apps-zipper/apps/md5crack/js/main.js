@@ -1,7 +1,7 @@
 //# sourceURL=main.js
 var q = magicwheel.require.q;
 
-magicwheel.utils.require(['CryptoJS', 'Cracker', 'angular']).then(function () {
+magicwheel.utils.require(['CryptoJS', 'Cracker']).then(function () {
 	var cracker = new Cracker();
 
 	var app = angular.module("md5", []);
@@ -79,6 +79,8 @@ magicwheel.utils.require(['CryptoJS', 'Cracker', 'angular']).then(function () {
 			}
 
 			setInterval($scope.tick, 500);
+			
+			$('.showOnReady').show();
         }]);
 
 	angular.bootstrap(document.getElementById("apps"), ["md5"]);

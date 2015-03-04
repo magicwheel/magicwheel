@@ -1,8 +1,5 @@
 //# sourceURL=controller.js
 
-//magicwheel.utils.require(['angular']).then(function () {
-
-// Define a new module for our app
 var app = angular.module("welcome", []);
 
 app.config(['$compileProvider',
@@ -10,10 +7,8 @@ app.config(['$compileProvider',
 		$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|tel|javascript):/);
 }]);
 
-// The controller
 app.controller('welcome', ['$scope', '$http',
         function ($scope, $http) {
-		console.log("WELCOME ANGULAR CONTROLLER");
 
 		$('.showOnReady').show();
 
@@ -86,7 +81,7 @@ app.controller('welcome', ['$scope', '$http',
 		}
 
 		$scope.tooltips = {
-			localStorage: "Once an application is executed, its code is saved to the browser's local storage<br /> <br /> Get the code as a zip file<br>Edit it <br>Drag your newely created zip to the screen<br>It may now spread to remote browsers",
+			localStorage: "Once an application is executed, its code is saved to the browser's local storage<br /> <br /> Get the code as a zip file<br>Edit it <br>Drag your newely created zip to the screen<br>It is now published to remote browsers",
 			remote: "When you brawse the URL of a remote application, it is copied from a remote browser to the local storage and then executed",
 			server: "To have your application available on the server, add it to the magicwheel source code on github"
 		}
@@ -105,5 +100,3 @@ app.controller('welcome', ['$scope', '$http',
         }]);
 
 angular.bootstrap(document.getElementById("apps"), ["welcome"]);
-
-//});

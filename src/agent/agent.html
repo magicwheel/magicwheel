@@ -5,6 +5,7 @@
 	<title>MAGICWHEEL AGENT</title>
 
 	<script>
+		//on debug mode angular is not included in a compiled agent
 		var debug = (window.location.search.indexOf('debug') != -1);
 
 		if (debug) {
@@ -68,11 +69,9 @@
 	<script id="magicwheel-ticker" type="javascript/worker">
 		setInterval(function () {
 			self.postMessage('tick');
-		}, 1000 / 60);
+		}, 1000 / 60); // 60 frames per second animation
 	</script>
 
-	<!--	<script type="text/javascript" src="/js/contrib/angular.min.js"></script>-->
-	<!--    <script type="text/javascript" src="/js/agent.js"></script>-->
 	<script>
 		var magicwheel = {};
 
@@ -101,15 +100,15 @@
 			magicwheel.dowloadAppCode();
 		}
 
-		function wiki() {
-			magicwheel.executeRoute('/wiki/process', {
-				term: 'explicit'
-			}, 'SELF').then(function (result) {});
-		}
-
-		function listTasks() {
-			magicwheel.executeRoute('/task/list', {}, 'SELF');
-		}
+		 //		function wiki() {
+		 //			magicwheel.executeRoute('/wiki/process', {
+		 //				term: 'explicit'
+		 //			}, 'SELF').then(function (result) {});
+		 //		}
+		 //
+		 //		function listTasks() {
+		 //			magicwheel.executeRoute('/task/list', {}, 'SELF');
+		 //		}
 
 		function initMagicwheel() {
 			console.log('*******INIT MAGICWHEEL***********');
@@ -124,26 +123,26 @@
 				magicwheel.consoleController.bindAndApply();
 			});
 
-//			magicwheel.on('/task/update', function (data) {
-//				if ($('#task-' + data.data.id).length) {
-//					$('#task-' + data.data.id)[0].innerHTML = data.data.status;
-//				}
-//			});
-//
-//			magicwheel.on('/wiki/process', function (data) {
-//				$('#tasks').append('<div id=task-' + data.taskId + '>STARTED</div>');
-//			});
-//
-//			magicwheel.on('/task/finish', function (data) {
-//				console.log(data);
-//				if ($('#task-' + data.data.task.id).length) {
-//					$('#task-' + data.data.task.id)[0].innerHTML = 'Fetching associations for term: ' + data.data.task.result.normalized + ' FINISHED';
-//				}
-//			});
-//
-//			magicwheel.on('taskExecuted', function (data) {
-//				$('#taskExecuted')[0].innerHTML = data.count;
-//			});
+			//			magicwheel.on('/task/update', function (data) {
+			//				if ($('#task-' + data.data.id).length) {
+			//					$('#task-' + data.data.id)[0].innerHTML = data.data.status;
+			//				}
+			//			});
+			//
+			//			magicwheel.on('/wiki/process', function (data) {
+			//				$('#tasks').append('<div id=task-' + data.taskId + '>STARTED</div>');
+			//			});
+			//
+			//			magicwheel.on('/task/finish', function (data) {
+			//				console.log(data);
+			//				if ($('#task-' + data.data.task.id).length) {
+			//					$('#task-' + data.data.task.id)[0].innerHTML = 'Fetching associations for term: ' + data.data.task.result.normalized + ' FINISHED';
+			//				}
+			//			});
+			//
+			//			magicwheel.on('taskExecuted', function (data) {
+			//				$('#taskExecuted')[0].innerHTML = data.count;
+			//			});
 
 			var blob = new Blob([
       document.querySelector('#magicwheel-ticker').textContent
@@ -210,16 +209,27 @@
 	</div>
 
 	<script>
-		var debug = (window.location.search.indexOf('debug') != -1);
+		function loadAgent() {
+			var debug = (window.location.search.indexOf('debug') != -1);
 
-		var s = document.createElement('script');
-		s.setAttribute('src', '/app/js/require.js');
-		if (debug) {
-			s.setAttribute('data-main', '/app/js/app');
-		} else {
-			s.setAttribute('data-main', '/app/js/app-built');
+			if (debug && !window.angular) {
+				setTimeout(loadAgent, 1000);
+				return;
+			}
+
+			var s = document.createElement('script');
+			
+			s.setAttribute('src', '/app/js/require.js');
+			
+			//use compiled scripts or seperated files according to debug mode
+			if (debug) {
+				s.setAttribute('data-main', '/app/js/app');
+			} else {
+				s.setAttribute('data-main', '/app/js/app-built');
+			}
+			document.body.appendChild(s);
 		}
-		document.body.appendChild(s);
+		loadAgent();
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">

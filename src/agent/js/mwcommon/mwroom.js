@@ -48,8 +48,7 @@ define(function (require) {
                     deferred.resolve(peer);
                 });
                 peer.on('error', function (err) {
-                    console.log('peer error', err);
-                    deferred.reject(err);
+                    deferred.reject('Signaling server error - ' + err.message);
                 });
 
                 // Await connections from others
@@ -93,12 +92,11 @@ define(function (require) {
                 slaveId = slaveId.replace(/\./g, 'x');
 
                 room._createPeer(slaveId).then(function (_peer) {
-
                     room.peer = _peer;
 
                     deferred.resolve(room);
                 }, function (err) {
-                    console.log(err);
+                    deferred.reject(err);
                 });
 
                 return deferred.promise;
