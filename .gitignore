@@ -1,6 +1,5 @@
 node_modules
 npm-debug.log
-src/agent/js/mwconfig.js
 src/agent/js/app-built-tmp.js
 src/apps-zipper/apps/*.zip
 .brackets.json
