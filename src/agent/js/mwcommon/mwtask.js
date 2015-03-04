@@ -1,3 +1,5 @@
+//todo clear all tasks
+
 define(function (require) {
 	var q = require('contrib/q'),
 		db = require('mwcommon/mwdb'),

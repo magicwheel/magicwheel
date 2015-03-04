@@ -28,7 +28,7 @@ define(function (require) {
     }
     $('#mwapp').html('<br><br><br><br><br><br><br><br><br><br>LOADING APPLICATION: ' + appNameRequested);
 
-    magicwheel.loadApp(appNameRequested).then(function (appRoom) {
+    magicwheel.loadApp(appNameRequested).then(function () {
         console.log('App loaded.');
 		magicwheel.appLoaded = true;
         magicwheel.emit('appLoaded');

@@ -74,10 +74,6 @@ define(function (require) {
         return magicwheel.executeRoute(task.route, task.inputObj, 'SELF', null, task._id);
     }
 
-    magicwheel.pullExecuteFinish = function () {
-        return mwtasksRunner.pullExecuteFinish();
-    }
-
     magicwheel.activate = function () {
         return mwtasksRunner.activate();
     }
@@ -93,13 +89,7 @@ define(function (require) {
 	magicwheel.ensureAppLoaded = function(){
 		var deferred = q.defer();
 		
-		if(magicwheel.appLoaded){
-			deferred.resolve();
-		} else{
-			magicwheel.on('appLoaded', function(){
-				deferred.resolve();
-			})
-		}
+		magicwheel.appLoaded ? deferred.resolve() :	magicwheel.on('appLoaded', deferred.resolve);
 		
 		return deferred.promise;
 	}

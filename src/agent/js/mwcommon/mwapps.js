@@ -62,9 +62,7 @@ define(function (require) {
 			mwfs.storageToZipBlobs('appZip', appName).then(function () {
 				var innerPath = window.location.pathname.substring(6 + appName.length);
 
-				if (!innerPath) {
-					innerPath = 'index.html';
-				}
+				!innerPath ? innerPath = 'index.html' : null;
 
 				magicApps._loadHtml(innerPath, deferred);
 			});
@@ -73,9 +71,7 @@ define(function (require) {
 		appRecieved: false,
 
 		_loadAppFromRoom: function (appName, deferred) {
-			if (!deferred) {
-				deferred = q.defer();
-			}
+			!deferred ? deferred = q.defer() : null;
 
 			console.log('Loading app from room');
 
@@ -91,7 +87,6 @@ define(function (require) {
 					}
 					magicApps.appRecieved = true;
 
-					//!!!
 					mwstorage.set('appZip', result.answer, appName);
 
 					deferred.resolve();
@@ -108,9 +103,7 @@ define(function (require) {
 		},
 
 		_loadHtml: function (path, deferred) {
-			if (!deferred) {
-				deferred = q.defer();
-			}
+			!deferred ? deferred = q.defer() : null;
 
 			if (path.substring(0, 4) == 'http') {
 				var win = window.open(path, '_blank').focus();
@@ -119,13 +112,9 @@ define(function (require) {
 
 			var historyState = '/app/' + magicwheel.currentApp;
 
-			if (path.indexOf('.html') == -1) {
-				path += '.html';
-			}
+			path.indexOf('.html') == -1 ? path += '.html' : null;
 
-			if (path != 'index.html') {
-				historyState += ('/' + path.replace('.html', ''));
-			}
+			path != 'index.html' ? historyState += ('/' + path.replace('.html', '')) : null;
 
 			window.history.replaceState({}, '', historyState + window.location.search);
 
@@ -148,9 +137,7 @@ define(function (require) {
 				$('script[magicwheel]').remove();
 
 				text = text.replace(/ src=/g, ' magicwheel-src=');
-
 				text = text.replace(/ href=/g, ' magicwheel-href=');
-
 				text = text.replace(/ mwhref=/g, ' href=');
 
 				$('#mwapp').html(text);
@@ -179,21 +166,17 @@ define(function (require) {
 				});
 
 				var promises = [];
-				
+
 				$('#mwapp script').each(function () {
-					try {
-						$(this).remove();
+					$(this).remove();
 
-						var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-src'));
+					var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-src'));
 
-						promises.push(mwutils.loadJS(blobURL));
-					} catch (e) {
-						console.error(e);
-					}
+					promises.push(mwutils.loadJS(blobURL));
 				});
 
-				q.all(promises).then(function(){
-					deferred.resolve(magicwheel.mainRoom);
+				q.all(promises).then(function () {
+					deferred.resolve();
 				});
 			});
 

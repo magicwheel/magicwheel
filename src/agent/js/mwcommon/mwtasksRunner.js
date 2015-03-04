@@ -58,12 +58,11 @@ define(function (require) {
 
 		activate: function () {
 			magicwheel.ensureAppLoaded().then(function () {
-
 				if (magicwheel.active) {
 					return;
 				}
 				magicwheel.active = true;
-				magicwheel.pullExecuteFinish().then(function (result) {
+				mwtasksRunner.pullExecuteFinish().then(function (result) {
 					magicwheel.active = false;
 					if (!result) {
 						return;
