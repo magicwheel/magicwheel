@@ -1,5 +1,6 @@
 var magicwheel = {
     currentApp: '',
+	appLoaded: false,
     mainRoom: null,
     routes: {},
     active: false,
@@ -19,7 +20,7 @@ define(function (require) {
         mwapps = require('mwcommon/mwapps'),
         mwfs = require('mwcommon/mwfs'),
         mwutils = require('mwcommon/mwutils'),
-        magicTasks = require('mwcommon/magic.tasks');
+        mwtasksRunner = require('mwcommon/mwtasksRunner');
 
     magicwheel.require = {
         q: q,
@@ -74,11 +75,11 @@ define(function (require) {
     }
 
     magicwheel.pullExecuteFinish = function () {
-        return magicTasks.pullExecuteFinish();
+        return mwtasksRunner.pullExecuteFinish();
     }
 
     magicwheel.activate = function () {
-        return magicTasks.activate();
+        return mwtasksRunner.activate();
     }
 
 	magicwheel.alert = function(headerText, messageText){
@@ -87,6 +88,20 @@ define(function (require) {
 		$('#mwalert .message').html(messageText);
 		
 		$('#mwalert').modal('show');
+	}
+	
+	magicwheel.ensureAppLoaded = function(){
+		var deferred = q.defer();
+		
+		if(magicwheel.appLoaded){
+			deferred.resolve();
+		} else{
+			magicwheel.on('appLoaded', function(){
+				deferred.resolve();
+			})
+		}
+		
+		return deferred.promise;
 	}
 
 });

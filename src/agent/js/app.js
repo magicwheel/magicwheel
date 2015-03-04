@@ -30,6 +30,7 @@ define(function (require) {
 
     magicwheel.loadApp(appNameRequested).then(function (appRoom) {
         console.log('App loaded.');
+		magicwheel.appLoaded = true;
         magicwheel.emit('appLoaded');
     }, function (error) {
        $('#mwapp').html('<br><br><br><br><br><br><br><br><br><br>ERROR: ' + error);

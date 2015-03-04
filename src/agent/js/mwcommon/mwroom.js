@@ -12,21 +12,13 @@ define(function (require) {
     var Room = function () {
         var room = {
             id: '',
-
             peer: null,
-
             status: 'IDLE', //IDLE,CREATING,CREATED
-
             mode: 'PUBLIC', //PUBLIC, PRIVATE(disconnected from peer server)
-
             creatingDate: null, //time when tried to connect
-
             askDeferreds: {},
-
             createDeferred: null,
-
             pendingConnections: {},
-			
 			latencies: {},
 
             _createPeer: function (id) {
@@ -62,7 +54,6 @@ define(function (require) {
                 }
 
                 return deferred.promise;
-
             },
 
             // returns room

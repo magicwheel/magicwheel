@@ -177,19 +177,23 @@ define(function (require) {
 					}
 				});
 
+				var promises = [];
+				
 				$('#mwapp script').each(function () {
 					try {
 						$(this).remove();
 
 						var blobURL = magicwheel.blobUrlByUrl($(this).attr('magicwheel-src'));
 
-						magicApps._loadJS(blobURL);
+						promises.push(magicApps._loadJS(blobURL));
 					} catch (e) {
-						console.log(e);
+						console.error(e);
 					}
 				});
 
-				deferred.resolve(magicwheel.mainRoom);
+				q.all(promises).then(function(){
+					deferred.resolve(magicwheel.mainRoom);
+				});
 			});
 
 		},
@@ -200,11 +204,29 @@ define(function (require) {
 		},
 
 		_loadJS: function (src) {
+			var deferred = q.defer();
+			
 			jQuery.ajaxSetup({
 				cache: true
 			});
-			var jsLink = $("<script magicwheel type='text/javascript' src='" + src + "'>");
-			$("head").append(jsLink);
+
+			var r = false;
+			var s = document.createElement('script');
+			s.type = 'text/javascript';
+			s.src = src;
+			s.onload = s.onreadystatechange = function () {
+				//console.log( this.readyState ); //uncomment this line to see which ready states are called.
+				if (!r && (!this.readyState || this.readyState == 'complete')) {
+					r = true;
+					deferred.resolve();
+				}
+			};
+			
+			var t = document.getElementsByTagName('script')[0];
+			
+			t.parentNode.insertBefore(s, t);
+			
+			return deferred.promise;
 		}
 	};
 

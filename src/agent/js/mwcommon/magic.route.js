@@ -5,20 +5,20 @@ define(function (require) {
     var magicRoute = {
 
         executeRoute: function (route, data, caller, room, taskId) {
-//            console.log('&&&&&&&& execute route ' + route + ' -  data:');
-//            console.log(data);
             if (!caller) {
                 caller = 'SELF';
             }
 
             if(!magicwheel.routes[route]){
-                console.error('magicwheel route not found', route);
-                return;
+				var deferred = q.defer();
+				deferred.reject('magicwheel route not found: ' + route);
+                return deferred.promise;
             }
             
             if (magicwheel.routes[route].self && caller != 'SELF') {
-                console.log('a self route called from outside: ' + route);
-                return;
+				var deferred = q.defer();
+				deferred.reject('a self route called from outside: ' + route);
+                return deferred.promise;
             }
 
             if (!taskId && magicwheel.routes[route].queue) {

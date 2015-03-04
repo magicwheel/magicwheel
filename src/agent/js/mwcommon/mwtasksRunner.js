@@ -2,7 +2,7 @@ define(function (require) {
 	var q = require('contrib/q'),
 		$ = require('jquery');
 
-	var magicTasks = {
+	var mwtasksRunner = {
 		pullExecuteFinish: function () {
 
 			var deferred = q.defer();
@@ -57,24 +57,27 @@ define(function (require) {
 		},
 
 		activate: function () {
-			if (magicwheel.active) {
-				return;
-			}
-			magicwheel.active = true;
-			magicwheel.pullExecuteFinish().then(function (result) {
-				magicwheel.active = false;
-				if (!result) {
+			magicwheel.ensureAppLoaded().then(function () {
+
+				if (magicwheel.active) {
 					return;
 				}
-				magicwheel.activate();
-			}, function (error) {
-				console.error('TASK EXECUTION ERROR:', error);
-				magicwheel.active = false;
-				magicwheel.activate();
+				magicwheel.active = true;
+				magicwheel.pullExecuteFinish().then(function (result) {
+					magicwheel.active = false;
+					if (!result) {
+						return;
+					}
+					magicwheel.activate();
+				}, function (error) {
+					console.error('TASK EXECUTION ERROR:', error);
+					magicwheel.active = false;
+					magicwheel.activate();
+				});
 			});
 		}
 
 	};
 
-	return magicTasks;
+	return mwtasksRunner;
 });

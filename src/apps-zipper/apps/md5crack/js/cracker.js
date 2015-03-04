@@ -12,13 +12,6 @@ var Cracker = function () {
 		},
 
 		crackAsync: function (firstCharInt, encrypted, deferred) {
-			
-			if(Math.random() > .9){
-				console.log('XXXXXXXXX');
-				return;
-			}
-				console.log('OK');
-			
 			var result = {};
 
 			for (i = 32; i < 127; i++) {

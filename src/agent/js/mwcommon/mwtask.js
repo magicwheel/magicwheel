@@ -156,9 +156,6 @@ define(function (require) {
 		magicwheel.activate();
 	}
 
-
-
-
 	var routes = {
 		'/task/insert': {
 			controller: taskInsert,
