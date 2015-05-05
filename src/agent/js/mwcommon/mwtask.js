@@ -1,5 +1,3 @@
-//todo clear all tasks
-
 define(function (require) {
 	var q = require('contrib/q'),
 		db = require('mwcommon/mwdb'),
@@ -21,6 +19,23 @@ define(function (require) {
 			console.log('err:');
 			console.log(err);
 		});
+	}
+
+	function taskClear(data, caller, room) {
+		console.log('AGENT ROUTE TASK/CLEAR');
+		
+		var deferred = q.defer();
+
+		db.remove('tasks', {}).then(function (tasks) {
+			console.log('All tasks cleared');
+			deferred.resolve();
+		}, function (err) {
+			console.log('err:');
+			console.log(err);
+			deferred.reject(err);
+		});
+		
+		return deferred.promise;
 	}
 
 	function taskPull(data, caller, room) {
@@ -165,6 +180,10 @@ define(function (require) {
 		},
 		'/task/list': {
 			controller: taskList,
+			self: true
+		},
+		'/task/clear': {
+			controller: taskClear,
 			self: true
 		},
 		'/task/pull': {

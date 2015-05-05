@@ -100,16 +100,6 @@
 			magicwheel.dowloadAppCode();
 		}
 
-		 //		function wiki() {
-		 //			magicwheel.executeRoute('/wiki/process', {
-		 //				term: 'explicit'
-		 //			}, 'SELF').then(function (result) {});
-		 //		}
-		 //
-		 //		function listTasks() {
-		 //			magicwheel.executeRoute('/task/list', {}, 'SELF');
-		 //		}
-
 		function initMagicwheel() {
 			console.log('*******INIT MAGICWHEEL***********');
 
@@ -122,27 +112,6 @@
 			magicwheel.on('forever', function () {
 				magicwheel.consoleController.bindAndApply();
 			});
-
-			//			magicwheel.on('/task/update', function (data) {
-			//				if ($('#task-' + data.data.id).length) {
-			//					$('#task-' + data.data.id)[0].innerHTML = data.data.status;
-			//				}
-			//			});
-			//
-			//			magicwheel.on('/wiki/process', function (data) {
-			//				$('#tasks').append('<div id=task-' + data.taskId + '>STARTED</div>');
-			//			});
-			//
-			//			magicwheel.on('/task/finish', function (data) {
-			//				console.log(data);
-			//				if ($('#task-' + data.data.task.id).length) {
-			//					$('#task-' + data.data.task.id)[0].innerHTML = 'Fetching associations for term: ' + data.data.task.result.normalized + ' FINISHED';
-			//				}
-			//			});
-			//
-			//			magicwheel.on('taskExecuted', function (data) {
-			//				$('#taskExecuted')[0].innerHTML = data.count;
-			//			});
 
 			var blob = new Blob([
       document.querySelector('#magicwheel-ticker').textContent
@@ -165,15 +134,12 @@
 
 <body>
 	<div id='mwconsole' style='display:none;' class='mwmain' ng-controller='console'>
-		<a ng-href="#" ng-click="$apply()">XXXXXXXXXXXXXX</a>
-		MAGICWHEEL CONSOLE2
+		MAGICWHEEL CONSOLE
 		<br>
 		<br>Current application: {{magicwheel.currentApp}}
 
 		<br>Debug mode: {{isDebugMode()}}
-		<br>
-		<button onclick='wiki()'>WIKI PROCESS</button>
-		<button onclick='listTasks()'>LIST TASKS</button>
+		<br><br>
 		<br>id:{{magicwheel.mainRoom.peer.id || magicwheel.mainRoom.peer._lastServerId}}
 		<br>peers:
 		<div ng-repeat="(k,v) in magicwheel.mainRoom.peer.connections">
@@ -183,7 +149,6 @@
 		<br>
 		<div id='tasks'></div>
 		<br>TASKS LOCALLY EXECUTED: <span id='taskExecuted'>0</span>
-		<!--		<img class="help" magicwheel-src="images/help.png" data-toggle="tooltip" data-placement="auto" data-original-title="To have your application available on the server, add it to the magicwheel source code on github" src="http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/red-white-pearls-icons-alphanumeric/073894-red-white-pearl-icon-alphanumeric-question-mark1-ps.png">-->
 	</div>
 	<div id='mwappWrapper' class='mwmain'>
 		<div id='mwapp' class='mwapp'>

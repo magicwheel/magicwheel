@@ -67,8 +67,8 @@ var exports = {
             name: 'matkot',
             description: 'An example for a multiplayer 3D game'
         }, {
-            name: 'wikigraph',
-            description: 'An example for sharing bandwidth, CPU and disk space'
+            name: 'md5crack',
+            description: 'An example for sharing CPU'
         }, {
             name: 'welcome',
             description: 'The application currently running'
