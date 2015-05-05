@@ -210,7 +210,7 @@ define(function (require) {
                 }).then(function () {
                     answered = true;
 					
-					room.latencies[id] = Math.ceil((Date.now() - time) / 2);
+					room.latencies[id] = Math.ceil((Date.now() - time) / 2) + 'ms';
                     
 					deferred.resolve(true);
                 });

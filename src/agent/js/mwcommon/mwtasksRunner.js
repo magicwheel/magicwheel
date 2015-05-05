@@ -18,21 +18,19 @@ define(function (require) {
 							result: result
 						}
 						if (task.caller == 'SELF') {
+							magicwheel.require.mwtask.counters.executedForSelf++;
+
 							magicwheel.executeRoute('/task/finish', {
 								task: taskData
 							}, 'SELF');
 						} else {
+							magicwheel.require.mwtask.counters.executedForOthers++;
+							
 							magicwheel.mainRoom.send(task.caller, {
 								route: '/task/finish',
 								task: taskData
 							});
 						}
-
-						magicwheel.tasksExecutedCounter++;
-
-						magicwheel.emit('taskExecuted', {
-							count: magicwheel.tasksExecutedCounter
-						});
 
 						deferred.resolve(true);
 					}, function (error) {

@@ -82,7 +82,7 @@ body {
 input:focus {
 	outline: none;
 }
-a {
+#mwappWrapper a {
 	color: rgb(72, 78, 255);
 	text-decoration: underline;
 	cursor: pointer;

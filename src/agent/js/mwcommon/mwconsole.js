@@ -22,6 +22,13 @@ app.controller('console', ['$scope', '$http', '$location',
 		
 			$scope.$apply();
 		}
+		
+		$scope.peersAvailable = function(){
+			for (k in magicwheel.mainRoom.peer.connections){
+				return true;
+			}
+			return false;
+		}
 		}]);
 
 angular.bootstrap(document.getElementById("mwconsole"), ["console"]);

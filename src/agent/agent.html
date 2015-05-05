@@ -24,6 +24,7 @@
 			width: 100%;
 			font-family: sans-serif;
 			font-size: 14px;
+			background: lightyellow !important;
 		}
 		#homeLink {
 			left: 20px;
@@ -50,19 +51,37 @@
 			text-align: center;
 			cursor: pointer;
 		}
-		#mwconsole {
-			background: lightyellow;
-			padding: 10px;
-			width: 100%;
-			min-height: 100%;
-			position: absolute;
-		}
 		#mwappWrapper {
 			background: lightcyan;
 			width: 100%;
 			min-height: 100%;
 			position: absolute;
 			text-align: center;
+		}
+		#tabsWrapper {
+			margin: 10px;
+		}
+		.tab-content {
+			border-bottom: 1px solid #ddd;
+			border-left: 1px solid #ddd;
+			border-right: 1px solid #ddd;
+			padding: 10px;
+		}
+		.nav-tabs {
+			/*			margin-bottom: -20px !important;*/
+		}
+		.panel-console {
+			/*	text-align: left;*/
+			width: 515px;
+			float: right;
+			-webkit-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+			-moz-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+			box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+			width: 600px;
+			left: 50%;
+			position: absolute;
+			margin-left: -300px;
+			margin-top: 20px;
 		}
 	</style>
 	<!-- use web worker as ticker to work around hidden tabs low CPU priority-->
@@ -107,6 +126,11 @@
 				$('#appName').html(magicwheel.currentApp);
 				$('#appRunning').show();
 				magicwheel.consoleController.$apply();
+
+				$("#myTab a").click(function (e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
 			});
 
 			magicwheel.on('forever', function () {
@@ -133,22 +157,38 @@
 </head>
 
 <body>
-	<div id='mwconsole' style='display:none;' class='mwmain' ng-controller='console'>
-		MAGICWHEEL CONSOLE
-		<br>
-		<br>Current application: {{magicwheel.currentApp}}
+	<div id='mwconsole' style='display:none;' class='mwmain panel panel-default panel-console' ng-controller='console'>
+		<div class="panel-heading console-heading">MAGICWHEEL CONSOLE</div>
 
-		<br>Debug mode: {{isDebugMode()}}
-		<br><br>
-		<br>id:{{magicwheel.mainRoom.peer.id || magicwheel.mainRoom.peer._lastServerId}}
-		<br>peers:
-		<div ng-repeat="(k,v) in magicwheel.mainRoom.peer.connections">
-			{{k}} - open: {{magicwheel.mainRoom.peer.connections[k][0].open}} - latency: {{magicwheel.mainRoom.latencies[k]}}
+		<div id='tabsWrapper'>
+			<ul class="nav nav-tabs" id="myTab">
+				<li class="active"><a href="#peers">Peers</a>
+				</li>
+				<li><a href="#tasks">Tasks</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div id="peers" class="tab-pane fade in active">
+					<i>Id:</i>
+					<br>{{magicwheel.mainRoom.peer.id || magicwheel.mainRoom.peer._lastServerId}}
+					<br>
+					<br><i>Peers:</i>
+					<div ng-repeat="(k,v) in magicwheel.mainRoom.peer.connections">
+						{{k}} - open: {{magicwheel.mainRoom.peer.connections[k][0].open}} - latency: {{magicwheel.mainRoom.latencies[k]}}
+					</div>
+					<div ng-hide="peersAvailable()">
+						No peers connected
+					</div>
+				</div>
+				<div id="tasks" class="tab-pane fade">
+					Tasks executed for self: <span id='taskExecuted'>{{magicwheel.require.mwtask.counters.executedForSelf}}</span>
+					<br>Tasks executed for others: <span id='taskExecuted'>{{magicwheel.require.mwtask.counters.executedForOthers}}</span>
+					<br>Tasks executed by others: <span id='taskExecuted'>{{magicwheel.require.mwtask.counters.executedByOthers}}</span>
+					<br>
+					<br><a href='#' onclick="magicwheel.executeRoute('/task/list',{})">List queued tasks in console</a>
+				</div>
+			</div>
 		</div>
-		<br>tasks:
-		<br>
-		<div id='tasks'></div>
-		<br>TASKS LOCALLY EXECUTED: <span id='taskExecuted'>0</span>
 	</div>
 	<div id='mwappWrapper' class='mwmain'>
 		<div id='mwapp' class='mwapp'>
@@ -183,9 +223,9 @@
 			}
 
 			var s = document.createElement('script');
-			
+
 			s.setAttribute('src', '/app/js/require.js');
-			
+
 			//use compiled scripts or seperated files according to debug mode
 			if (debug) {
 				s.setAttribute('data-main', '/app/js/app');

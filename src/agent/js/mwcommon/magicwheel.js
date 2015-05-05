@@ -4,7 +4,6 @@ var magicwheel = {
     mainRoom: null,
     routes: {},
     active: false,
-    tasksExecutedCounter: 0,
     roomCreated: false
 }
 
@@ -27,7 +26,8 @@ define(function (require) {
         _: _,
         $: $,
         mwfs: mwfs,
-		mwstorage: mwstorage
+		mwstorage: mwstorage,
+		mwtask: mwtask
     }
 
     magicwheel.utils = mwutils;

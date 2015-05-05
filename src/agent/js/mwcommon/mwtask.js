@@ -141,6 +141,10 @@ define(function (require) {
 	function taskFinish(data, caller, room) {
 		console.log('AGENT ROUTE TASK/FINISH');
 
+		if(caller != 'SELF'){
+			counters.executedByOthers++;
+		}
+		
 		db.update('tasks', {
 			_id: data.task.id
 		}, {
@@ -198,11 +202,18 @@ define(function (require) {
 		'/task/help': {
 			controller: taskHelp
 		}
-	}
+	};
 
+	var counters = {
+		executedForSelf: 0,
+		executedForOthers: 0,
+		executedByOthers: 0
+	};
+	
 	$.extend(true, magicwheel.routes, routes);
 
 	return {
-		routes: routes
+		routes: routes,
+		counters: counters
 	}
 });

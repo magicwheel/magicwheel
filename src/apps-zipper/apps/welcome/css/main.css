@@ -11,10 +11,10 @@ body {
     position: relative;
     margin-left: -400px;
 }
-.panel {
-    text-align: left;
-    width: 515px;
-    float: right;
+.panel-welcome {
+    text-align: left !important;
+    width: 515px !important;
+    float: right !important;
     -webkit-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
     -moz-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
     box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
