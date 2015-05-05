@@ -24,6 +24,9 @@ app.controller('console', ['$scope', '$http', '$location',
 		}
 		
 		$scope.peersAvailable = function(){
+			if(!magicwheel || !magicwheel.mainRoom || !magicwheel.mainRoom.peer || !magicwheel.mainRoom.peer.connections){
+				return false;
+			}
 			for (k in magicwheel.mainRoom.peer.connections){
 				return true;
 			}
