@@ -31,11 +31,15 @@ The Magicwheel application is merely a zipped html site. The html pages are pres
 ## Development
 
 The 'debug' query parameter will fetch the agent scripts non-aggregated: http://magicwheel.info?debug
-The 'refresh' query parameter will rebuild the application zip on the server
+
+The 'refresh' query parameter will rebuild the application zip on the server.
+
 Use the /compile path to reaggregate and minify the agent scripts once changed
 
 ##Feedback
+
 dannyhad@gmail.com
 
 ##License
+
 MIT
