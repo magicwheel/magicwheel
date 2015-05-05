@@ -1,67 +1,79 @@
 //# sourceURL=main.css
-
-body {
-    background: lightcyan !important;
-    overflow: auto;
-    font-family: sans-serif !important;
+ body {
+	background: lightcyan !important;
+	overflow: auto;
+	font-family: sans-serif !important;
 }
 #apps {
-    width: 800px;
-    left: 50%;
-    position: relative;
-    margin-left: -400px;
+	width: 800px;
+	left: 50%;
+	position: relative;
+	margin-left: -400px;
 }
 .panel-welcome {
-    text-align: left !important;
-    width: 515px !important;
-    float: right !important;
-    -webkit-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
-    -moz-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
-    box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	text-align: left !important;
+	width: 515px !important;
+	float: right !important;
+	-webkit-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	-moz-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
 }
 .help {
-    float: right;
-    top: 2px;
-    position: relative;
+	float: right;
+	top: 2px;
+	position: relative;
 }
 .tooltip-inner {
-    font-size: 14px;
-    min-width: 300px;
-    background: rgb(32, 32, 22);
+	font-size: 14px;
+	min-width: 300px;
+	background: rgb(32, 32, 22);
 }
 .logo {
-    float: left;
+	float: left;
 }
 .logo img {
-    left: 6px;
-    position: relative;
-    -webkit-filter: drop-shadow(6px 6px 5px #AAA);
-    filter: drop-shadow(6px 6px 5px #AAA);
+	left: 6px;
+	position: relative;
+	-webkit-filter: drop-shadow(6px 6px 5px #AAA);
+	filter: drop-shadow(6px 6px 5px #AAA);
 }
 #dragHere {
-    border: dashed;
-    padding: 16px;
-    width: 245px;
-    margin-top: 30px;
-    margin-left: 11px;
-    border-radius: 22px;
-    -webkit-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
-    -moz-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
-    box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
-    background: rgb(192, 255, 255);
+	border: dashed;
+	padding: 16px;
+	width: 245px;
+	margin-top: 30px;
+	margin-left: 11px;
+	border-radius: 22px;
+	-webkit-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	-moz-box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	box-shadow: 8px 9px 14px 0px rgba(50, 50, 50, 0.44) !important;
+	background: rgb(192, 255, 255);
 }
 #clouds {
-    z-index: 0;
-    position: fixed;
-    left: 50%;
-    top: 0;
-    margin-left: -1000px;
-    width: 2000px;
-    filter: brightness(288%);
-    filter: brightness(288%);
-    -webkit-filter: brightness(288%);
-    -moz-filter: brightness(288%);
-    -o-filter: brightness(288%);
-    -ms-filter: brightness(288%);
-    opacity: .07;
+	z-index: 0;
+	position: fixed;
+	left: 50%;
+	top: 0;
+	margin-left: -1000px;
+	width: 2000px;
+	filter: brightness(288%);
+	filter: brightness(288%);
+	-webkit-filter: brightness(288%);
+	-moz-filter: brightness(288%);
+	-o-filter: brightness(288%);
+	-ms-filter: brightness(288%);
+	opacity: .07;
+}
+a {
+	cursor: pointer;
+}
+#aboutContent {
+  width: 600px;
+  left: -300px;
+  position: relative;
+  text-align: left;
+}
+#aboutWrapper {
+  left: 50%;
+  position: relative;
 }
