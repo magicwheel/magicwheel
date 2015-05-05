@@ -2,6 +2,8 @@
 
 Magicwheel is a small scale experiment demonstrating the concept of serverless applications.
 
+Drag and drop your multiplayer game or resource sharing application to have it serverlessly published to remote browsers.
+
 ### [http://magicwheel.info](http:///magicwheel.info)
 
 ## Install
