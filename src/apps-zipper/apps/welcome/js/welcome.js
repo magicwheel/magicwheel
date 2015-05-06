@@ -21,7 +21,7 @@ drag.ondrop = function (e) {
 		return;
 	}
 
-	var appName = "NEW_" + file.name.replace('.zip', '');
+	var appName = "NEW_" + file.name.replace('.zip', '').replace('(','').replace(')','').replace(' ','');
 
 	magicwheel.require.mwfs.blobToStorage(file, 'appZip', appName).then(function (result) {
 		//window.location.href = '/app/' + appName;
