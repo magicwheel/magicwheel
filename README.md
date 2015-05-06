@@ -24,7 +24,7 @@ node app-peer-server.js
 
 ## Architecture
 
-Magicwheel is agent-based. Once the agent is downloaded from the server, the server is no longer in use.
+Magicwheel is agent-based. Once the agent is downloaded from the server, the server is no longer in use. Browsers may get the agent from different domains and still communicate.
 
 The agents use a signaling server (at this point a single one) to establish WebRTC data channels, over which they publish and execute multi-user applications, as well as share resources using a map-reduce strategy.
 
@@ -36,7 +36,7 @@ The 'debug' query parameter will fetch the agent scripts non-aggregated: http://
 
 The 'refresh' query parameter will rebuild the application zip on the server.
 
-Use the /compile path to reaggregate and minify the agent scripts once changed
+Use the /compile path to reaggregate and minify the agent scripts once changed.
 
 ##Feedback
 
