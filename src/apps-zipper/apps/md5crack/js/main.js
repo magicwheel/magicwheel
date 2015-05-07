@@ -35,6 +35,7 @@ magicwheel.utils.require(['CryptoJS', 'Cracker']).then(function () {
 
 				$scope.active = true;
 
+				//clear all old tasks
 				magicwheel.executeRoute('/task/clear', {}).then(
 					function () {
 						$scope._insertTasks();
@@ -43,6 +44,7 @@ magicwheel.utils.require(['CryptoJS', 'Cracker']).then(function () {
 			};
 
 			$scope._insertTasks = function () {
+				// map task to small tasks
 				for (i = 32; i < 127; i++) {
 					var promise = magicwheel.executeRoute('/md5/crack', {
 						firstCharInt: i,
@@ -51,6 +53,7 @@ magicwheel.utils.require(['CryptoJS', 'Cracker']).then(function () {
 
 					$scope.tasksTotal++;
 
+					// on small task completed by local browser or remote peer 
 					promise.then(function (result) {
 						$scope.tasksFinished++;
 

@@ -43,6 +43,7 @@ var Game = function (controls) {
 			}
 		},
 
+		//a magicwheel route called by the partner to update the game state
 		routeSetModel: function (inputObj, caller, room, taskId) {
 			if (game.model.active) {
 				if (inputObj.model.strike && inputObj.model.strike.time && inputObj.model.strike.time != game.strikeTime) {
@@ -158,6 +159,7 @@ var Game = function (controls) {
 
 			modelSend.ballMoveY = game.model.ballMoveY;
 
+			//send the new state to the partner
 			magicwheel.mainRoom.sendAll({
 				route: '/matkot/setModel',
 				model: modelSend

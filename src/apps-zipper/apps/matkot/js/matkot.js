@@ -5,16 +5,13 @@ var q = magicwheel.require.q,
 	$ = magicwheel.require.$;
 
 magicwheel.utils.require(['Game', 'View2d', 'View3d', 'Controls']).then(function () {
-	var scope = angular.element(document.getElementById("matkot")).scope();
-
-	var controls = new Controls();
-	
-	var game = new Game(controls);
+	var scope = angular.element(document.getElementById("matkot")).scope(),
+		controls = new Controls(),
+		game = new Game(controls),
+		view = new View3d(game, controls),
+		view2 = new View2d(game, controls);
 
 	scope.setGame(game);
-
-	var view = new View3d(game, controls);
-	var view2 = new View2d(game, controls);
 
 	function showHighestScore() {
 		if (!localStorage['app.tennis.highestScore']) {
@@ -47,13 +44,13 @@ magicwheel.utils.require(['Game', 'View2d', 'View3d', 'Controls']).then(function
 		setTimeout(showHighestScore, 5000);
 	}
 
-//	showHighestScore();
-
+	// a magicwheel route called by a remote peer to initialize a game session
 	function routeInvite(inputObj, caller, room, taskId) {
-		magicwheel.mainRoom.goPrivate([caller]);
-
 		var deferred = q.defer();
 		
+		// disconnect from all peers other then the partner
+		magicwheel.mainRoom.goPrivate([caller]);
+
 		deferred.resolve({
 			interested: true
 		});
