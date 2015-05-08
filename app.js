@@ -64,7 +64,7 @@ http.listen(config.port, function () {
 });
 
 function sendAgent(req, res) {
-	res.cookie('magicWheelClientIP', req.connection.remoteAddress, {
+	res.cookie('magicWheelClientIP', req.headers['x-forwarded-for']||req.connection.remoteAddress, {
         path: '/'
     });
 	
