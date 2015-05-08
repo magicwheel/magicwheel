@@ -57,6 +57,11 @@ app.get('/compile', function (req, res) {
     });
 });
 
+app.get('/debug' , function (req, res) {
+	console.log(req);
+	res.send(req.headers);
+});
+		
 zipper.initZipper(app);
 
 http.listen(config.port, function () {
