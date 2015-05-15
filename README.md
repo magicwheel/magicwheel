@@ -36,9 +36,9 @@ WebRTC communications: peer.js
 
 Resource sharing management: browserified node embeded mongoDB
 
-Agent compilation: automated require.js
+Agent compilation: automated optimizer for require.js
 
-UI: angular
+UI: angular.js
 
 WebGL 3D: three.js
 
