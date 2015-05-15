@@ -33,9 +33,13 @@ The Magicwheel application is merely a zipped html site. The html pages are pres
 ## Technologies
 
 WebRTC communications: peer.js
+
 Resource sharing management: browserified node embeded mongoDB
+
 Agent compilation: automated require.js
+
 UI: angular
+
 WebGL 3D: three.js
 
 ## Development
