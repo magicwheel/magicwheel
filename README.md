@@ -30,6 +30,14 @@ The agents use a signaling server (at this point a single one) to establish WebR
 
 The Magicwheel application is merely a zipped html site. The html pages are presented locally by the agent as Blobs. The applications' scripts use the agent API to simplify the P2P communications and resource sharing.
 
+## Technologies
+
+WebRTC communications: peer.js
+Resource sharing management: browserified node embeded mongoDB
+Agent compilation: automated require.js
+UI: angular
+WebGL 3D: three.js
+
 ## Development
 
 The 'debug' query parameter will fetch the agent scripts non-aggregated: http://magicwheel.info?debug
