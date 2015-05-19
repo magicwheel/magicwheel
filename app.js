@@ -1,5 +1,4 @@
-var express = require('express'),
-    app = require('express')(),
+var app = require('express')(),
     config = require('./config/config'),
     http = require('http').Server(app),
     cookieParser = require('cookie-parser'),
