@@ -4,8 +4,6 @@ Magicwheel is a small scale experiment demonstrating the concept of serverless a
 
 Drag and drop your multiplayer game or resource sharing application to have it serverlessly published to remote browsers.
 
-### [http://magicwheel.info](http:///magicwheel.info)
-
 ## Install
 ```sh
 $ git clone git://github.com/magicwheel/magicwheel.git
