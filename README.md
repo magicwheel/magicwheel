@@ -48,10 +48,10 @@ The 'refresh' query parameter will rebuild the application zip on the server.
 
 Use the /compile path to reaggregate and minify the agent scripts once changed.
 
-##Feedback
+## Feedback
 
 dannyhad@gmail.com
 
-##License
+## License
 
 MIT
